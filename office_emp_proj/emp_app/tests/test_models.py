@@ -17,7 +17,6 @@ class TestAllModels(TestCase):
             owner=test_owner,
             title="test title",
             content="test content",
-            slug="test",
         )
 
     def test_title_of_post(self):
@@ -31,10 +30,3 @@ class TestAllModels(TestCase):
         self.post_obj.likes.set([testUser1.pk])
 
         self.assertEqual(self.post_obj.likes.count(), 1)
-
-    def test_slug_method(self):
-        self.post_obj.slug = Post.objects.get(id=1)
-        self.assertEqual(
-            "/test/",
-            self.post_obj.slug.get_absolute_url(),
-        )

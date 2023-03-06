@@ -4,16 +4,27 @@ from django.shortcuts import (
     redirect,
 )
 from .models import Post
-
-# Create your views here.
-
-
-def home(request):
-    all_posts = Post.objects.all()
-    return render(request, "index.html", {"posts": all_posts})
+from django.views.generic.base import (
+    TemplateView,
+    RedirectView,
+)
+from django.db.models import F
 
 
-def single_post(request, post):
-    post = get_object_or_404(Post, slug=post)
+class Ex2View(TemplateView):
+    template_name = "index.html"
+    # template_engine=""
 
-    return render(request, "single_post.html", {"post": post})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["posts"] = Post.objects.all()
+        return context
+
+
+class SinglePostView(TemplateView):
+    template_name = "single_post.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["post"] = get_object_or_404(Post, pk=self.kwargs.get("pk"))
+        return context
